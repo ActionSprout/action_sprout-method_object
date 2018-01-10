@@ -70,6 +70,31 @@ ParseConfiguration.call(name: 'user-config') do |config|
 end
 ```
 
+### Usage without Rails
+
+In a Ruby on Rails project, the `method_object` class method is automatically available. Outside of Rails, an extra step is necessary.
+
+`MethodObject` can be included directly in a specific class.
+
+```ruby
+class SaveUser
+  extend ActionSprout::MethodObject
+  method_object :user, repository: UserRepository.new
+
+  def call
+    repository.save user
+  end
+end
+
+SaveUser.call user: user
+```
+
+Or, to make `method_object` available on all class, include it in `Module` somewhere in initialization.
+
+```ruby
+Module.include ActionSprout::MethodObject
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
