@@ -1,8 +1,6 @@
 # ActionSprout::MethodObject
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/action_sprout/method_object`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A simple class method that makes it super easy to create a method object taking keyword attributes.
 
 ## Installation
 
@@ -22,7 +20,55 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+MethodObject is a quick shortcut for creating "method objects". Under the hood, it uses kwattr. Check out the [kwattr docs][] for how to configure options.
+
+[kwattr docs]: https://github.com/etiennebarrie/kwattr
+
+Example:
+
+```ruby
+class SaveUser
+  method_object :user, repository: UserRepository.new
+
+  def call
+    repository.save user
+  end
+end
+
+SaveUser.call user: user
+```
+
+### Summary of kwattr options:
+
+`kwattr` stands for key-word-attributes and therefore only supports setting up method objects that take keyword arguments. Each positional argument passed to `method_object` represents a required attribute, and each keyword argument passed to `method_object` represents an option attribute and its default.
+
+### Block support
+
+A block may be passed to the `call` class method. This block will be passed directly to the `call` instance method. For example:
+
+```ruby
+class ParseConfiguration
+  method_object :name
+
+  def call
+    yield configuration
+  end
+
+  private
+
+  def configuration
+    YAML.load_file(file_name)[Rails.env]
+  end
+
+  def file_name
+    Rails.root.join('config', name).to_s
+  end
+end
+
+ParseConfiguration.call(name: 'user-config') do |config|
+  # do something with config
+end
+```
 
 ## Development
 
