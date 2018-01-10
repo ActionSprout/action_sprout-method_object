@@ -6,9 +6,9 @@ RSpec.describe ActionSprout::MethodObject do
     expect(ActionSprout::MethodObject::VERSION).not_to be nil
   end
 
-  Module.include ActionSprout::MethodObject
 
   class MyMethodObject
+    extend ActionSprout::MethodObject
     method_object
 
     def call
@@ -17,6 +17,7 @@ RSpec.describe ActionSprout::MethodObject do
   end
 
   class AMethodObjectWithOptions
+    extend ActionSprout::MethodObject
     method_object :foo, bar: 42
 
     def call
@@ -25,10 +26,12 @@ RSpec.describe ActionSprout::MethodObject do
   end
 
   class NoCallDefined
+    extend ActionSprout::MethodObject
     method_object
   end
 
   class WithABlock
+    extend ActionSprout::MethodObject
     method_object :foo
 
     def call

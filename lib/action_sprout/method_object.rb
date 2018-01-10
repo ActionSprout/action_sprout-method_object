@@ -1,5 +1,6 @@
 require 'action_sprout/method_object/version'
 require 'kwattr'
+require 'action_sprout/method_object/railtie' if defined?(Rails)
 
 module ActionSprout
   # MethodObject is a quick shortcut for creating "method objects". Under the
