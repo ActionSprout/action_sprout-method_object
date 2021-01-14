@@ -33,6 +33,10 @@ module ActionSprout
       kwattr(*args)
     end
 
+    if Module.private_method_defined?(:ruby2_keywords)
+      ruby2_keywords(:method_object)
+    end
+
     module ClassMethods
       def call(**args, &block)
         new(**args).call(&block)
